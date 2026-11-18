@@ -261,11 +261,7 @@
                 <div class="doc-list-scroll">
                     <ul class="doc-list" id="listContainerNews">
                         <li class="doc-item-row">
-                            <span class="doc-title-text">&#128196; Ogłoszenie_Bieżące.pdf</span>
-                            <div class="doc-actions-group">
-                                <a href="ogloszenia_pdf/Ogloszenie_BiezAce.pdf" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
-                                <a href="ogloszenia_pdf/Ogloszenie_BiezAce.pdf" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
-                            </div>
+                            <span class="doc-title-text">&#128196; Ładowanie ogłoszeń...</span>
                         </li>
                     </ul>
                 </div>
@@ -476,31 +472,38 @@
             }
         });
 
-        /* POBIERANIE TYLKO OGŁOSZEŃ BIEŻĄCYCH */
-        fetch('pobierz_ogloszenia.php')
+        /* AUTOMATYCZNE POBIERANIE OGŁOSZEŃ Z GITHUB API */
+        const owner = 'NAZWA_UZYTKOWNIKA_GITHUB'; // Wpisz swoją nazwę użytkownika lub organizacji na GitHubie
+        const repo = 'NAZWA_REPOZYTORIUM';         // Wpisz nazwę swojego repozytorium
+        const folderNews = 'ogloszenia_pdf';
+
+        fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folderNews}`)
             .then(response => response.json())
-            .then(files => {
-                if(files && files.length > 0) {
+            .then(data => {
+                if(Array.isArray(data) && data.length > 0) {
                     const container = document.getElementById('listContainerNews');
                     if(container) {
                         container.innerHTML = '';
-                        files.forEach(file => {
-                            const filePath = 'ogloszenia_pdf/' + file;
-                            const li = document.createElement('li');
-                            li.className = 'doc-item-row';
-                            li.innerHTML = `
-                                <span class="doc-title-text">&#128196; ${file}</span>
-                                <div class="doc-actions-group">
-                                    <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
-                                    <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
-                                </div>
-                            `;
-                            container.appendChild(li);
+                        data.forEach(item => {
+                            if(item.type === 'file' && item.name.toLowerCase().endsWith('.pdf')) {
+                                const filePath = item.path;
+                                const fileName = item.name;
+                                const li = document.createElement('li');
+                                li.className = 'doc-item-row';
+                                li.innerHTML = `
+                                    <span class="doc-title-text">&#128196; ${fileName}</span>
+                                    <div class="doc-actions-group">
+                                        <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
+                                        <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
+                                    </div>
+                                `;
+                                container.appendChild(li);
+                            }
                         });
                     }
                 }
             })
-            .catch(err => console.log('Brak pobierz_ogloszenia.php'));
+            .catch(err => console.log('Błąd pobierania ogłoszeń z GitHub API:', err));
     </script>
 </body>
 </html>
