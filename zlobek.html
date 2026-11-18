@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumenty Żłobka - SP w Jaszczowie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981; --primary-light: #059669; --accent: #d97706; --accent-hover: #b45309;
+            --bg-main: #f0f7ff; --card-bg: #ffffff; --text-dark: #0f172a; --text-muted: #475569; --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
+        }
+        body.dark-theme {
+            --primary: #34d399; --primary-light: #10b981; --accent: #fbbf24; --accent-hover: #d97706;
+            --bg-main: #0f172a; --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8; --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: var(--text-dark); min-height: 100vh; padding: 2rem 1.5rem; }
+        .wrapper { max-width: 900px; margin: 0 auto; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; background: var(--card-bg); color: var(--primary-light); border: 2px solid var(--border-color); padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s ease; }
+        .btn-back:hover { background: var(--primary-light); color: #fff; }
+        
+        .doc-page-card { background: var(--card-bg); border-radius: 24px; border: 1px solid var(--border-color); padding: 2.5rem; box-shadow: var(--shadow); }
+        .doc-page-title { font-family: 'Cinzel', serif; color: var(--primary-light); font-size: 1.8rem; margin-bottom: 0.5rem; text-align: center; }
+        .doc-page-subtitle { color: var(--text-muted); text-align: center; margin-bottom: 2rem; }
+        
+        .doc-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .doc-item-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 14px; padding: 1rem 1.4rem; gap: 15px; }
+        .doc-title-text { font-weight: 700; font-size: 1rem; color: var(--text-dark); word-break: break-word; }
+        .doc-actions-group { display: flex; gap: 10px; flex-shrink: 0; }
+        
+        .btn-doc { font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-view-tab { background: var(--primary-light); color: #fff; }
+        .btn-download-tab { background: var(--accent); color: #fff; }
+
+        @media (max-width: 600px) {
+            .doc-item-row { flex-direction: column; align-items: flex-start; }
+            .doc-actions-group { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="top-bar">
+            <a href="index.html" class="btn-back">&#8592; Strona Główna</a>
+            <h3 style="font-family: 'Cinzel', serif; color: var(--primary-light);">Dokumenty Żłobka</h3>
+        </div>
+
+        <div class="doc-page-card">
+            <h1 class="doc-page-title">👶 Dokumentacja Żłobka</h1>
+            <p class="doc-page-subtitle">Wszystkie dokumenty, regulaminy i karty zgłoszeniowe dla żłobka:</p>
+
+            <ul class="doc-list" id="listContainerNursery">
+                <li class="doc-item-row">
+                    <span class="doc-title-text">&#128196; Regulamin_Zlobka.pdf</span>
+                    <div class="doc-actions-group">
+                        <a href="zlobek_pdf/Regulamin_Zlobka.pdf" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
+                        <a href="zlobek_pdf/Regulamin_Zlobka.pdf" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark-theme'); }
+        
+        fetch('pobierz_zlobek.php')
+            .then(response => response.json())
+            .then(files => {
+                if(files && files.length > 0) {
+                    const container = document.getElementById('listContainerNursery');
+                    container.innerHTML = '';
+                    files.forEach(file => {
+                        const filePath = 'zlobek_pdf/' + file;
+                        const li = document.createElement('li');
+                        li.className = 'doc-item-row';
+                        li.innerHTML = `
+                            <span class="doc-title-text">&#128196; ${file}</span>
+                            <div class="doc-actions-group">
+                                <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
+                                <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
+                            </div>
+                        `;
+                        container.appendChild(li);
+                    });
+                }
+            })
+            .catch(err => console.log('Brak pobierz_zlobek.php'));
+    </script>
+</body>
+</html>
