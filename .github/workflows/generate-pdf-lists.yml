@@ -1,0 +1,52 @@
+name: Generate PDF Lists
+
+on:
+  push:
+    paths:
+      - 'ogloszenia_pdf/**'
+      - 'pliki_pdf/**'
+      - 'zlobek_pdf/**'
+      - '.github/workflows/generate-pdf-lists.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-lists:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate list.json for PDF folders
+        run: |
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const folders = ["ogloszenia_pdf", "pliki_pdf", "zlobek_pdf"];
+
+            for (const folder of folders) {
+              fs.mkdirSync(folder, { recursive: true });
+              const files = fs.readdirSync(folder, { withFileTypes: true })
+                .filter(entry => entry.isFile() && entry.name.toLowerCase().endsWith(".pdf"))
+                .map(entry => entry.name)
+                .sort((a, b) => a.localeCompare(b, "pl", { sensitivity: "base" }));
+
+              fs.writeFileSync(
+                path.join(folder, "list.json"),
+                JSON.stringify(files, null, 2) + "\n",
+                "utf8"
+              );
+            }
+          '
+
+      - name: Commit updated list.json files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ogloszenia_pdf/list.json pliki_pdf/list.json zlobek_pdf/list.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update PDF lists"
+            git push
+          fi
