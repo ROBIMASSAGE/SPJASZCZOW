@@ -69,19 +69,50 @@
 
     <script>
         if (localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark-theme'); }
-        
-        fetch('pobierz_zlobek.php')
-            .then(response => response.json())
-            .then(files => {
-                if(files && files.length > 0) {
-                    const container = document.getElementById('listContainerNursery');
+
+        const GITHUB_CONFIG = {
+            owner: 'spjaszczow',
+            repo: 'spjaszczow.pl'
+        };
+
+        function resolveRepoInfo() {
+            if (GITHUB_CONFIG.owner && GITHUB_CONFIG.repo) {
+                return GITHUB_CONFIG;
+            }
+            const host = window.location.hostname;
+            if (host.endsWith('.github.io')) {
+                const owner = host.replace('.github.io', '');
+                const parts = window.location.pathname.split('/').filter(Boolean);
+                const repo = parts.length > 0 ? parts[0] : `${owner}.github.io`;
+                return { owner, repo };
+            }
+            return GITHUB_CONFIG;
+        }
+
+        function loadPdfListFromGitHub(folder, containerId) {
+            const { owner, repo } = resolveRepoInfo();
+            if (!owner || !repo) return;
+
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('GitHub API status: ' + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data)) return;
+                    const pdfFiles = data.filter(item => item.type === 'file' && item.name.toLowerCase().endsWith('.pdf'));
+                    if (pdfFiles.length === 0) return;
+
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+
                     container.innerHTML = '';
-                    files.forEach(file => {
-                        const filePath = 'zlobek_pdf/' + file;
+                    pdfFiles.forEach(item => {
+                        const filePath = `${folder}/${encodeURIComponent(item.name)}`;
                         const li = document.createElement('li');
                         li.className = 'doc-item-row';
                         li.innerHTML = `
-                            <span class="doc-title-text">&#128196; ${file}</span>
+                            <span class="doc-title-text">&#128196; ${item.name}</span>
                             <div class="doc-actions-group">
                                 <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
                                 <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
@@ -89,9 +120,11 @@
                         `;
                         container.appendChild(li);
                     });
-                }
-            })
-            .catch(err => console.log('Brak pobierz_zlobek.php'));
+                })
+                .catch(err => console.log('Błąd pobierania plików z GitHub API:', err));
+        }
+
+        loadPdfListFromGitHub('zlobek_pdf', 'listContainerNursery');
     </script>
 </body>
 </html>

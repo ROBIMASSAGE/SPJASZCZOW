@@ -261,7 +261,11 @@
                 <div class="doc-list-scroll">
                     <ul class="doc-list" id="listContainerNews">
                         <li class="doc-item-row">
-                            <span class="doc-title-text">&#128196; Ładowanie ogłoszeń...</span>
+                            <span class="doc-title-text">&#128196; Ogłoszenie_Bieżące.pdf</span>
+                            <div class="doc-actions-group">
+                                <a href="ogloszenia_pdf/Ogloszenie_BiezAce.pdf" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
+                                <a href="ogloszenia_pdf/Ogloszenie_BiezAce.pdf" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -430,10 +434,39 @@
     <div class="legal-modal" id="modal-wcag">
         <div class="legal-modal-body">
             <span class="legal-close-btn" onclick="closeLegalModal('modal-wcag')">&times;</span>
-            <h3>Deklaracja Dostępności</h3>
-            <p><strong>Szkoła Podstawowa im. Natalii Nekraszowej w Jaszczowie</strong> zobowiązuje się zapewnić dostępność swojej strony internetowej zgodnie z przepisami ustawy z dnia 4 kwietnia 2019 r. o dostępności cyfrowej stron internetowych i aplikacji mobilnych podmiotów publicznych.</p>
+            <h3>Deklaracja dostępności</h3>
+            <p>Szkoła Podstawowa im. Natalii Nekraszowej w Jaszczowie zobowiązuje się zapewnić dostępność swojej strony internetowej zgodnie z przepisami ustawy z dnia 4 kwietnia 2019 r. o dostępności cyfrowej stron internetowych i aplikacji mobilnych podmiotów publicznych. Deklaracja dostępności dotyczy strony internetowej https://spjaszczow.pl/.</p>
+            <ul>
+                <li>Data publikacji strony internetowej: wrzesień 2026 r. (początek roku szkolnego)</li>
+                <li>Data ostatniej istotnej aktualizacji: wrzesień 2026 r. (początek roku szkolnego)</li>
+            </ul>
+            <h4>Status pod względem zgodności z ustawą</h4>
+            <p>Strona internetowa jest częściowo zgodna z ustawą o dostępności cyfrowej z powodu niezgodności lub wyłączeń wymienionych poniżej:</p>
+            <ul>
+                <li>Dokumenty publikowane w serwisie udostępniane są w formacie PDF, co ze względu na budowę strony może wiązać się z ograniczoną dostępnością cyfrową niektórych materiałów.</li>
+                <li>Starsze dokumenty oraz załączniki mogą nie spełniać w pełni wymagań dostępności cyfrowej lub podlegać wyłączeniom przewidzianym w przepisach.</li>
+            </ul>
+            <p>Data sporządzenia deklaracji: 24.11.2026 r.<br>Deklaracja została sporządzona na podstawie samooceny przeprowadzonej przez podmiot publiczny.</p>
             <h4>Informacje zwrotne i dane kontaktowe</h4>
-            <p>E-mail: <strong>spjaszczow@wp.pl</strong> | Telefon: <strong>81 757 20 57</strong></p>
+            <p>W przypadku problemów z dostępnością strony internetowej prosimy o kontakt z osobą wyznaczoną do kontaktu w sprawach dostępności:</p>
+            <ul>
+                <li>Osoba kontaktowa: Dyrektor Szkoły</li>
+                <li>Adres e-mail: spjaszczow@wp.pl (sprawdź i potwierdź aktualny e-mail kontaktowy)</li>
+                <li>Numer telefonu: 81 757 20 57 (sprawdź i potwierdź aktualny numer telefonu)</li>
+            </ul>
+            <p>Tą samą drogą można składać wnioski o udostępnienie informacji niedostępnej oraz składać skargi na niespełnienie tych wymogów.</p>
+            <p>Każdy ma prawo do wystąpienia z żądaniem zapewnienia dostępności cyfrowej strony internetowej lub jej elementu, wskazując sposób kontaktu oraz – w razie potrzeby – preferowaną formę udostępnienia informacji (np. jako dokument tekstowy, odczyt głosowy lub informację przesłaną e-mailem). Podmiot publiczny powinien zrealizować żądanie bez zbędnej zwłoki, nie później niż w terminie 7 dni od dnia wystąpienia z żądaniem (a w sytuacjach przewidzianych ustawą – nie później niż w ciągu 2 miesięcy, po wcześniejszym poinformowaniu wnioskodawcy).</p>
+            <p>W przypadku odmowy realizacji żądania zapewnienia dostępności cyfrowej lub nieprzyjęcia żądania wnioskodawcy przysługuje prawo złożenia skargi do organu nadzorczego (zgodnie z przepisami ustawy o dostępności cyfrowej, w tym w sprawach rozpatrywanych w trybie ustawy – do Rzecznika Praw Obywatelskich).</p>
+            <h4>Dostępność architektoniczna</h4>
+            <p>Szkoła Podstawowa im. Natalii Nekraszowej w Jaszczowie, Jaszczów 24, 21-020 Milejów:</p>
+            <ul>
+                <li>Wejście do szatni odbywa się bez schodów, natomiast z szatni na kolejne poziomy prowadzą schody.</li>
+                <li>Podjazd prowadzi na parter, gdzie znajduje się żłobek i przedszkole; dalej na wyższe kondygnacje prowadzą schody.</li>
+                <li>Na poziomie parteru (żłobka i przedszkola), w miejscu, do którego dociera podjazd, zamontowany jest domofon umożliwiający wezwanie pomocy/kontaktu.</li>
+                <li>W budynku nie ma windy ani platformy umożliwiającej dotarcie na wyższe piętra.</li>
+                <li>Z poziomu parteru (żłobka i przedszkola) dostępny jest podjazd na salę gimnastyczną; na tym samym poziomie znajdują się również łazienki i toalety dostosowane dla osób z niepełnosprawnościami.</li>
+                <li>Osoby z psem przewodnikiem mogą wejść do budynku szkoły.</li>
+            </ul>
         </div>
     </div>
 
@@ -473,37 +506,61 @@
         });
 
         /* AUTOMATYCZNE POBIERANIE OGŁOSZEŃ Z GITHUB API */
-        const owner = 'NAZWA_UZYTKOWNIKA_GITHUB'; // Wpisz swoją nazwę użytkownika lub organizacji na GitHubie
-        const repo = 'NAZWA_REPOZYTORIUM';         // Wpisz nazwę swojego repozytorium
-        const folderNews = 'ogloszenia_pdf';
+        const GITHUB_CONFIG = {
+            owner: 'spjaszczow',
+            repo: 'spjaszczow.pl'
+        };
 
-        fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folderNews}`)
-            .then(response => response.json())
-            .then(data => {
-                if(Array.isArray(data) && data.length > 0) {
-                    const container = document.getElementById('listContainerNews');
-                    if(container) {
-                        container.innerHTML = '';
-                        data.forEach(item => {
-                            if(item.type === 'file' && item.name.toLowerCase().endsWith('.pdf')) {
-                                const filePath = item.path;
-                                const fileName = item.name;
-                                const li = document.createElement('li');
-                                li.className = 'doc-item-row';
-                                li.innerHTML = `
-                                    <span class="doc-title-text">&#128196; ${fileName}</span>
-                                    <div class="doc-actions-group">
-                                        <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
-                                        <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
-                                    </div>
-                                `;
-                                container.appendChild(li);
-                            }
-                        });
-                    }
-                }
-            })
-            .catch(err => console.log('Błąd pobierania ogłoszeń z GitHub API:', err));
+        function resolveRepoInfo() {
+            if (GITHUB_CONFIG.owner && GITHUB_CONFIG.repo) {
+                return GITHUB_CONFIG;
+            }
+            const host = window.location.hostname;
+            if (host.endsWith('.github.io')) {
+                const owner = host.replace('.github.io', '');
+                const parts = window.location.pathname.split('/').filter(Boolean);
+                const repo = parts.length > 0 ? parts[0] : `${owner}.github.io`;
+                return { owner, repo };
+            }
+            return GITHUB_CONFIG;
+        }
+
+        function loadPdfListFromGitHub(folder, containerId) {
+            const { owner, repo } = resolveRepoInfo();
+            if (!owner || !repo) return;
+
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('GitHub API status: ' + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data)) return;
+                    const pdfFiles = data.filter(item => item.type === 'file' && item.name.toLowerCase().endsWith('.pdf'));
+                    if (pdfFiles.length === 0) return;
+
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    container.innerHTML = '';
+                    pdfFiles.forEach(item => {
+                        const filePath = `${folder}/${encodeURIComponent(item.name)}`;
+                        const li = document.createElement('li');
+                        li.className = 'doc-item-row';
+                        li.innerHTML = `
+                            <span class="doc-title-text">&#128196; ${item.name}</span>
+                            <div class="doc-actions-group">
+                                <a href="${filePath}" target="_blank" rel="noopener" class="btn-doc btn-view-tab">&#128065; Podgląd</a>
+                                <a href="${filePath}" download class="btn-doc btn-download-tab">&#128190; Pobierz</a>
+                            </div>
+                        `;
+                        container.appendChild(li);
+                    });
+                })
+                .catch(err => console.log('Błąd pobierania plików z GitHub API:', err));
+        }
+
+        loadPdfListFromGitHub('ogloszenia_pdf', 'listContainerNews');
     </script>
 </body>
 </html>
